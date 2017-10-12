@@ -1,9 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <locale>
+#include <map>
 
 struct parsed_t
 {
@@ -24,5 +26,7 @@ public:
     Conf_parser(const std::vector<std::string> &v, const std::string &sep);
     // ~Conf_parser();
     std::unique_ptr<struct parsed_t> parseString(std::string &str);
+    std::map<std::string, std::string> parseStream(std::fstream &stream);
+
     void viewConfig();
 };

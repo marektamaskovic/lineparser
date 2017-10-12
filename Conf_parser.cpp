@@ -12,7 +12,7 @@ void Conf_parser::viewConfig(){
     for(auto item : this->keys){
         std::cout << item << ", ";
     }
-    std::cout << "\b\b  " << std::endl;
+    std::cout << "\b\b " << std::endl;
 }
 
 std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
@@ -23,7 +23,7 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
     sep_pos = str.find(this->separator);
 
     if(sep_pos == std::string::npos){
-        std::cout << "ERROR: separator not found" << std::endl;
+        std::cout << "ERROR: separator not found: '" << str << "'" << std::endl;
     }
     else{
         // std::cout << "found at: " << str.substr(sep_pos) << " " << sep_pos << std::endl;
@@ -40,7 +40,7 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
         // std::cout << "parsed:  '" << key << "'='" << val << "'" << std::endl;
 
         if(this->checkKeyValidity(key)){
-            std::cerr << "ERROR: parsed key is not in key set inserted:" << key << std::endl;
+            std::cerr << "ERROR: parsed key is not in key set inserted: '" << key << "'" << std::endl;
             return nullptr;
         }
         else{
@@ -51,6 +51,30 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
     }
 
     return nullptr;
+}
+
+std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream){
+
+    std::map<std::string, std::string> m;
+    std::map<std::string, std::string>::iterator it;
+    std::string line;
+
+    while ( getline (stream, line) ){
+        // std::cout << "raw:" << line << '\n';
+        auto p = this->parseString(line);
+        if(p != nullptr){
+            // std::cout << "par: " << p->lvalue << "=" << p->rvalue << std::endl;
+            it = m.find(p->lvalue);
+            if (it != m.end()){
+                m.emplace(p->lvalue, p->rvalue);
+            }
+            else{
+                m[p->lvalue] = p->rvalue;
+            }
+        }
+    }
+
+    return m;
 }
 
 bool Conf_parser::trim(std::string &str){
