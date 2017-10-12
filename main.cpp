@@ -15,12 +15,11 @@ int main(){
 
 	if (my_file.is_open()){
 		while ( getline (my_file,line) ){
-			std::cout << line << '\n';
-			struct parsed_t *p = parser.parseString(line);
+			std::cout << "raw:" << line << '\n';
+			auto p = parser.parseString(line);
 			if(p != nullptr){
-				std::cout << p->lvalue << "=" << p->rvalue << std::endl;
+				std::cout << "par: " << p->lvalue << "=" << p->rvalue << std::endl;
 			}
-			delete p;
 		}
 		my_file.close();
 	}

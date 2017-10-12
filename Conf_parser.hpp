@@ -16,13 +16,13 @@ class Conf_parser
 {
 	std::vector<std::string> keys;
 	std::string separator {""};
-	int trim(std::string &str);
-	int checkKeyValidity(const std::string key);
+	bool trim(std::string &str);
+	bool checkKeyValidity(const std::string &key);
 
 public:
-	Conf_parser(const std::vector<std::string> v);
-	Conf_parser(const std::vector<std::string> v, const std::string sep);
+	Conf_parser(const std::vector<std::string> &v);
+	Conf_parser(const std::vector<std::string> &v, const std::string &sep);
 	// ~Conf_parser();
-	struct parsed_t *parseString(std::string str);
+	std::unique_ptr<struct parsed_t> parseString(std::string &str);
 	void viewConfig();
 };
