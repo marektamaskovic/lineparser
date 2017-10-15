@@ -58,9 +58,12 @@ std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream
     std::map<std::string, std::string> m;
     std::map<std::string, std::string>::iterator it;
     std::string line;
+    std::vector<std::string> error_lines;
+    int line_num = 0;
 
     while ( getline (stream, line) ){
         // std::cout << "raw:" << line << '\n';
+        line_num++;
         auto p = this->parseString(line);
         if(p != nullptr){
             // std::cout << "par: " << p->lvalue << "=" << p->rvalue << std::endl;
@@ -72,7 +75,17 @@ std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream
                 m[p->lvalue] = p->rvalue;
             }
         }
+	else{
+		std::cout << "Line: " << std::to_string(line_num) << ": " << line << std::endl;
+	    //error_lines.emplace_back(std::to_string(line_num) + ": " + line);
+	}
     }
+
+    //std::cout << "Error on these lines:" << std::endl;
+    for(auto er_line: error_lines){
+        std::cout << er_line << std::endl;
+    }
+    
 
     return m;
 }
