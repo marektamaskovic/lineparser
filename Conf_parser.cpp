@@ -15,7 +15,7 @@ void Conf_parser::viewConfig(){
     std::cout << "\b\b " << std::endl;
 }
 
-std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
+std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str, const unsigned &line_num){
 
     std::string::size_type sep_pos;
     std::string key_c, key, val;
@@ -23,7 +23,7 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
     sep_pos = str.find(this->separator);
 
     if(sep_pos == std::string::npos){
-        std::cout << "ERROR: separator not found: '" << str << "'" << std::endl;
+        std::cerr << "ERROR:" << line_num << ": separator not found: '" << str << "'" << std::endl;
     }
     else{
         // std::cout << "found at: " << str.substr(sep_pos) << " " << sep_pos << std::endl;
@@ -31,16 +31,16 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
         val = str.substr(sep_pos + 1);
 
         if(this->trim(key)){
-            std::cerr << "ERROR: trim(): '"<< key << "'" << std::endl;
+            std::cerr << "ERROR:" << line_num << ":trim(): '"<< key << "'" <<std::endl;
         }
 
         if(this->trim(val)){
-            std::cerr << "ERROR: trim(): '"<< val << "'" << std::endl;
+            std::cerr << "ERROR:" << line_num <<":trim(): '"<< val << "'" << std::endl;
         }
         // std::cout << "parsed:  '" << key << "'='" << val << "'" << std::endl;
 
         if(this->checkKeyValidity(key)){
-            std::cerr << "ERROR: parsed key is not in key set inserted: '" << key << "'" << std::endl;
+            std::cerr << "ERROR:" << line_num << ": parsed key is not in key set inserted: '" << key << "'" << std::endl;
             return nullptr;
         }
         else{
@@ -64,7 +64,7 @@ std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream
     while ( getline (stream, line) ){
         // std::cout << "raw:" << line << '\n';
         line_num++;
-        auto p = this->parseString(line);
+        auto p = this->parseString(line, line_num);
         if(p != nullptr){
             // std::cout << "par: " << p->lvalue << "=" << p->rvalue << std::endl;
             it = m.find(p->lvalue);
@@ -75,10 +75,6 @@ std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream
                 m[p->lvalue] = p->rvalue;
             }
         }
-	else{
-		std::cout << "Line: " << std::to_string(line_num) << ": " << line << std::endl;
-	    //error_lines.emplace_back(std::to_string(line_num) + ": " + line);
-	}
     }
 
     //std::cout << "Error on these lines:" << std::endl;
