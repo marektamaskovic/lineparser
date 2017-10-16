@@ -86,7 +86,7 @@ bool Conf_parser::parseStream(std::fstream &stream){
 bool Conf_parser::trim(std::string &str){
 
     if(str.length() <= 0){
-        return 1;
+        return true;
     }
 
     std::locale loc;
@@ -99,7 +99,7 @@ bool Conf_parser::trim(std::string &str){
         str = str.substr(1);
     }
 
-    return 0;
+    return false;
 }
 
 bool Conf_parser::checkKeyValidity(const std::string &key){
@@ -107,7 +107,7 @@ bool Conf_parser::checkKeyValidity(const std::string &key){
     for(auto a: this->keys){
         // std::cout << "Cmp:" << a << ":" << key << std::endl;
         if(!key.compare(a)){
-            return 0;
+            return false;
         }
         else{
             continue;
