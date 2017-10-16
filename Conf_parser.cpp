@@ -53,7 +53,7 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
     return nullptr;
 }
 
-std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream){
+bool Conf_parser::parseStream(std::fstream &stream){
 
     std::map<std::string, std::string> m;
     std::map<std::string, std::string>::iterator it;
@@ -74,7 +74,13 @@ std::map<std::string, std::string> Conf_parser::parseStream(std::fstream &stream
         }
     }
 
-    return m;
+    this->output_map = m;
+    if(this->checkMapValidity()){
+        return false;
+    }
+    else{
+        return true;
+    }
 }
 
 bool Conf_parser::trim(std::string &str){
@@ -109,4 +115,13 @@ bool Conf_parser::checkKeyValidity(const std::string &key){
     }
 
     return 1;
+}
+
+bool Conf_parser::checkMapValidity(){
+    std::cerr << "ERROR: Override this virtual method!" << std::endl;
+    return false;
+}
+
+std::map<std::string, std::string> Conf_parser::getMap(){
+    return this->output_map;
 }
