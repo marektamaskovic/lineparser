@@ -1,12 +1,12 @@
-#include "Conf_parser.hpp"
+#include "ConfigParser.hpp"
 
-Conf_parser::Conf_parser(const std::vector<std::string> &v, const std::string &sep):
+ConfigParser::ConfigParser(const std::vector<std::string> &v, const std::string &sep):
                         keys(v), separator(sep) {}
 
-Conf_parser::Conf_parser(const std::vector<std::string> &v):
-                        Conf_parser(v, "=") {}
+ConfigParser::ConfigParser(const std::vector<std::string> &v):
+                        ConfigParser(v, "=") {}
 
-void Conf_parser::viewConfig(){
+void ConfigParser::viewConfig(){
     std::cout << "separator:\t" << this->separator << std::endl;
     std::cout << "keys:\t";
     for(auto item : this->keys){
@@ -15,7 +15,7 @@ void Conf_parser::viewConfig(){
     std::cout << "\b\b " << std::endl;
 }
 
-std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
+std::unique_ptr<struct parsed_t> ConfigParser::parseString(std::string &str){
 
     std::string::size_type sep_pos;
     std::string key_c, key, val;
@@ -53,7 +53,7 @@ std::unique_ptr<struct parsed_t> Conf_parser::parseString(std::string &str){
     return nullptr;
 }
 
-bool Conf_parser::parseStream(std::fstream &stream){
+bool ConfigParser::parseStream(std::fstream &stream){
 
     std::map<std::string, std::string> m;
     std::map<std::string, std::string>::iterator it;
@@ -83,7 +83,7 @@ bool Conf_parser::parseStream(std::fstream &stream){
     }
 }
 
-bool Conf_parser::trim(std::string &str){
+bool ConfigParser::trim(std::string &str){
 
     if(str.length() <= 0){
         return true;
@@ -102,7 +102,7 @@ bool Conf_parser::trim(std::string &str){
     return false;
 }
 
-bool Conf_parser::checkKeyValidity(const std::string &key){
+bool ConfigParser::checkKeyValidity(const std::string &key){
 
     for(auto a: this->keys){
         // std::cout << "Cmp:" << a << ":" << key << std::endl;
@@ -117,11 +117,11 @@ bool Conf_parser::checkKeyValidity(const std::string &key){
     return 1;
 }
 
-bool Conf_parser::checkMapValidity(){
-    std::cerr << "ERROR: Override this virtual method!" << std::endl;
+bool ConfigParser::checkMapValidity(){
+    std::cerr << "ERROR: Override ConfigParser::checkMapValidity() virtual method!" << std::endl;
     return false;
 }
 
-std::map<std::string, std::string> Conf_parser::getMap(){
+std::map<std::string, std::string> ConfigParser::getMap(){
     return this->output_map;
 }

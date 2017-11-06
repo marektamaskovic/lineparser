@@ -14,7 +14,7 @@ struct parsed_t
     parsed_t(const std::string a, const std::string b): lvalue(a), rvalue(b) {};
 };
 
-class Conf_parser
+class ConfigParser
 {
     std::vector<std::string> keys;
     std::string separator {""};
@@ -24,9 +24,9 @@ class Conf_parser
     virtual bool checkMapValidity();
 
 public:
-    Conf_parser(const std::vector<std::string> &v);
-    Conf_parser(const std::vector<std::string> &v, const std::string &sep);
-    // ~Conf_parser();
+    ConfigParser(const std::vector<std::string> &v);
+    ConfigParser(const std::vector<std::string> &v, const std::string &sep);
+    // ~ConfigParser();
     std::unique_ptr<struct parsed_t> parseString(std::string &str);
     bool parseStream(std::fstream &stream);
     std::map<std::string, std::string> getMap();
