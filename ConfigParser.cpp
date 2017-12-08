@@ -65,7 +65,7 @@ bool ConfigParser::parseStream(std::fstream &stream){
         if(p != nullptr){
             // std::cout << "par: " << p->lvalue << "=" << p->rvalue << std::endl;
             it = m.find(p->lvalue);
-            if (it != m.end()){
+            if (it == m.end()){
                 m.emplace(p->lvalue, p->rvalue);
             }
             else{
